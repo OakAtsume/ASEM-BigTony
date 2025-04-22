@@ -182,8 +182,8 @@ def check_decrypt_key(key : BigInt, prime : BigInt)
 
         # # Decrypt and write to the original filename
         puts("Decrypting: #{file} to #{original_path}..")
-        out_file = File.open("#{original_path}")
-        in_file = File.open("#{file}")
+        out_file = File.open("#{original_path}", "wb")
+        in_file = File.open("#{file}", "rb")
         buffer = Bytes.new(5 * 1024) # 4kb
         loop do
           bytes = in_file.read(buffer)
