@@ -57,7 +57,6 @@ class ASM
     packed.each do |byte|
       decrypted.push(
         (byte * invert[0]) % prime
-
       )
     end
     decrypted.pack("C*")

